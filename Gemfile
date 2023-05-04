@@ -5,6 +5,7 @@ ruby "3.1.2"
 
 #Custom gems
 gem "devise"
+gem "faker"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4", ">= 7.0.4.3"
