@@ -13,6 +13,15 @@ require 'faker'
 puts "Cleaning database..."
 # Post.destroy_all
 
+puts "Creating users with devise..."
+100.times do
+  User.create!(
+    email: Faker::Internet.email,
+    password: Faker::Internet.password(min_length: 6)
+  )
+end
+puts "Created #{User.count} users"
+
 puts "Creating Post..."
 pages = %w[top_rated popular upcoming]
 pages.each do |page|
@@ -25,8 +34,10 @@ pages.each do |page|
       body: Faker::Cannabis.strain,
       user_id: rand(1..100),
       post_image: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
-      location: movie["vote_average"]
+      location: rand(1..100)
     )
+    puts "Created post #{movie['title']}"
   end
 end
+puts "Created #{Post.count} posts"
 puts "Finished!"
