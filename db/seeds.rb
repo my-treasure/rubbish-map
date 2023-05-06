@@ -23,7 +23,7 @@ pages.each do |page|
     Post.create(
       title: movie["title"],
       body: Faker::Cannabis.strain,
-      user_id: randint(1..100),
+      user_id: rand(1..100),
       post_image: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
       location: movie["vote_average"]
     )
