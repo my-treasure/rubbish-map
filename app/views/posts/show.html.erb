@@ -1,2 +1,6 @@
-<h1>Posts#show</h1>
-<p>Find me in app/views/posts/show.html.erb</p>
+<div>
+  <h4> Post title: <%= @posts.title %> </h4>
+  <h4>Post image: </h4>
+  <img src=<%= @posts.post_image %> alt="post image" width="10%" height="10%">
+  <h4> Post body: <%= @posts.body %> </h4>
+</div>
