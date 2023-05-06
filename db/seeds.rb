@@ -9,6 +9,7 @@
 require 'open-uri'
 require 'json'
 require 'faker'
+require 'geocoder'
 
 puts "Cleaning database..."
 User.destroy_all
@@ -30,13 +31,17 @@ pages.each do |page|
   response = URI.open(url).read
   data = JSON.parse(response)
   data["results"].each do |movie|
+    rand_latitude = rand(52.4901..52.5130)
+    rand_longitude = rand(13.3888..13.4449)
+    reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
     Post.create(
       title: movie["title"],
       body: Faker::Cannabis.strain,
       user_id: User.all.sample.id,
       post_image: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
-      lat: rand(52.4901..52.5130),
-      lng: rand(13.3888..13.4449)
+      address: reverse_geocode.first.address,
+      lat: rand_latitude,
+      lng: rand_longitude
     )
     puts "Created post #{movie['title']}"
   end
