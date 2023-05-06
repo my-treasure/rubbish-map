@@ -35,8 +35,8 @@ pages.each do |page|
       body: Faker::Cannabis.strain,
       user_id: User.all.sample.id,
       post_image: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
-      lat: rand(52.4901..52.5130),
-      lng: rand(13.3888..13.4449)
+      latitude: rand(52.4901..52.5130),
+      longitude: rand(13.3888..13.4449)
     )
     puts "Created post #{movie['title']}"
   end
