@@ -10,18 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_05_04_183201) do
+ActiveRecord::Schema[7.0].define(version: 2023_05_06_104602) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "posts", force: :cascade do |t|
     t.text "post_image"
-    t.text "location"
     t.text "title"
     t.text "body"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "lat"
+    t.float "lon"
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -33,6 +34,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_04_183201) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "lat"
+    t.float "lon"
+    t.string "user_name"
+    t.text "profile_picture"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
