@@ -11,10 +11,11 @@ require 'json'
 require 'faker'
 
 puts "Cleaning database..."
-# Post.destroy_all
+User.destroy_all
+Post.destroy_all
 
 puts "Creating users with devise..."
-100.times do
+15.times do
   User.create!(
     email: Faker::Internet.email,
     password: Faker::Internet.password(min_length: 6)
@@ -32,9 +33,10 @@ pages.each do |page|
     Post.create(
       title: movie["title"],
       body: Faker::Cannabis.strain,
-      user_id: rand(1..100),
+      user_id: User.all.sample.id,
       post_image: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
-      location: rand(1..100)
+      lat: rand(52.4901..52.5130),
+      lng: rand(13.3888..13.4449)
     )
     puts "Created post #{movie['title']}"
   end
