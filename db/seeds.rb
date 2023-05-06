@@ -17,9 +17,15 @@ Post.destroy_all
 
 puts "Creating users with devise..."
 15.times do
+  rand_latitude = rand(52.4901..52.5130)
+  rand_longitude = rand(13.3888..13.4449)
+  reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
   User.create!(
     email: Faker::Internet.email,
-    password: Faker::Internet.password(min_length: 6)
+    password: Faker::Internet.password(min_length: 6),
+    address: reverse_geocode.first.address,
+    latitude: rand_latitude,
+    longitude: rand_longitude
   )
 end
 puts "Created #{User.count} users"
@@ -40,8 +46,8 @@ pages.each do |page|
       user_id: User.all.sample.id,
       post_image: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
       address: reverse_geocode.first.address,
-      lat: rand_latitude,
-      lng: rand_longitude
+      latitude: rand_latitude,
+      longitude: rand_longitude
     )
     puts "Created post #{movie['title']}"
   end
