@@ -22,6 +22,7 @@ puts "Creating users with devise..."
   reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
   User.create!(
     email: Faker::Internet.email,
+    user_name: Faker::Internet.username,
     password: Faker::Internet.password(min_length: 6),
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
