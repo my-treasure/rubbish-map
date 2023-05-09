@@ -5,9 +5,14 @@ class PostsController < ApplicationController
     @markers = @posts.geocoded.map do |post|
       {
         lat: post.latitude,
-        lng: post.longitude
+        lng: post.longitude,
+        info_window_html: render_to_string(partial: "info_window", locals: { post: post }),
+        marker_html: render_to_string(partial: "marker", locals: { post: post })
+
       }
     end
+
+
   end
 
   def show
