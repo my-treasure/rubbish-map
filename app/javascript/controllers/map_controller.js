@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder"
 
 export default class extends Controller {
@@ -9,6 +10,7 @@ export default class extends Controller {
 
   connect() {
     console.log("Hello from the map controller 🫣");
+
     mapboxgl.accessToken = this.apiKeyValue
     this.map = new mapboxgl.Map({
       container: this.element,
@@ -23,7 +25,9 @@ export default class extends Controller {
         mapboxgl: mapboxgl,
       })
     );
+
   }
+
   #addMarkersToMap() {
     this.markersValue.forEach((marker) => {
       const popup = new mapboxgl.Popup().setHTML(marker.info_window_html);
