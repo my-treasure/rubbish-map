@@ -130,6 +130,8 @@ GEM
       activesupport (>= 5.0)
     i18n (1.13.0)
       concurrent-ruby (~> 1.0)
+    inquirer (0.2.1)
+      term-ansicolor (>= 1.2.2)
     io-console (0.6.0)
     irb (1.6.4)
       reline (>= 0.3.0)
@@ -172,6 +174,9 @@ GEM
     orm_adapter (0.5.0)
     pg (1.5.3)
     popper_js (2.11.7)
+    pp (0.4.0)
+      prettyprint
+    prettyprint (0.1.1)
     public_suffix (5.0.1)
     puma (5.6.5)
       nio4r (~> 2.0)
@@ -239,9 +244,14 @@ GEM
       sprockets (>= 3.0.0)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
+    sync (0.5.0)
+    term-ansicolor (1.7.1)
+      tins (~> 1.0)
     thor (1.2.1)
     tilt (2.1.0)
     timeout (0.3.2)
+    tins (1.32.1)
+      sync
     turbo-rails (1.4.0)
       actionpack (>= 6.0.0)
       activejob (>= 6.0.0)
@@ -283,9 +293,11 @@ DEPENDENCIES
   faker
   font-awesome-sass (~> 6.1)
   geocoder
+  inquirer
   jbuilder
   jsbundling-rails
   pg (~> 1.1)
+  pp
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.3)
   ruby-openai
