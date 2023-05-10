@@ -44,7 +44,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_05_10_134020) do
 
   create_table "posts", force: :cascade do |t|
     t.text "post_image"
-    t.text "location"
     t.text "title"
     t.text "body"
     t.bigint "user_id", null: false
