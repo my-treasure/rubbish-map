@@ -48,7 +48,6 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 gem "devise"
-gem "faker"
 
 gem "autoprefixer-rails"
 gem "font-awesome-sass", "~> 6.1"
@@ -56,11 +55,22 @@ gem "sassc-rails"
 gem "bootstrap", '~> 5.2'
 gem "simple_form", github: "heartcombo/simple_form"
 
+# maps
 gem 'geocoder'
-gem "ruby-openai"
 
+# seed generation
+gem "ruby-openai"
+gem "faker"
+
+# terminal interactivity
 gem 'inquirer'
 gem 'pp'
+
+# .env file security
+# gem "dotenv-rails", groups: [:development, :test]
+
+# image hosting
+gem "cloudinary"
 
 
 group :development, :test do
