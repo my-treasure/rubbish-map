@@ -24,9 +24,10 @@ puts "Creating users with devise..."
     email: Faker::Internet.email,
     user_name: Faker::Internet.username,
     password: Faker::Internet.password(min_length: 6),
+    role: "seed",
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
-    longitude: rand_longitude
+    longitude: rand_longitude,
   )
 end
 puts "Created #{User.count} users"
@@ -48,7 +49,8 @@ pages.each do |page|
       post_image: "https://image.tmdb.org/t/p/w500#{movie['poster_path']}",
       address: reverse_geocode.first.address,
       latitude: rand_latitude,
-      longitude: rand_longitude
+      longitude: rand_longitude,
+      created_at: Faker::Date.between(from: '2022-01-01', to: '2022-12-31')
     )
     puts "Created post #{movie['title']}"
   end
