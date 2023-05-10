@@ -27,7 +27,7 @@ puts "Creating users with devise..."
     role: "seed",
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
-    longitude: rand_longitude,
+    longitude: rand_longitude
   )
 end
 puts "Created #{User.count} users"
