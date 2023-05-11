@@ -16,6 +16,7 @@ require "openai"
 require "cloudinary"
 require "cloudinary/uploader"
 require "cloudinary/utils"
+require 'digest'
 
 Cloudinary.config do |config|
   config.cloud_name = ENV.fetch("CLOUDINARY_CLOUD_NAME")
@@ -31,7 +32,7 @@ ALL_IMAGES = Cloudinary::Api.resources(type: "upload", max_results: 500)
 puts "📝 2. Renaming images..."
 # correcting image names replace "-", "(", ")" with "_"
 Dir.foreach(
-  File.join(Rails.root, "app", "assets", "images", "post_seed")
+  File.join(Rails.root, "app", "assets", "images", "post_seed"),
 ) do |filename|
   next if [".", ".."].include?(filename) # skip current and parent directories
 
@@ -75,9 +76,105 @@ Dir.foreach(
   end
 end
 
-puts "🧼 4. Cleaning database..."
+puts "🧼 Cleaning database..."
 User.destroy_all
 Post.destroy_all
+
+puts "🤖 connecting with openai."
+CLIENT =
+  OpenAI::Client.new(
+    access_token: ENV.fetch("OPENAI_ACCESS_TOKEN"),
+    request_timeout: 240
+  )
+
+# topis for creating tweets
+TOPIC = [
+  "something trashy",
+  "something artsy",
+  "something related to a violent event",
+  "a fight",
+  "a demostration",
+  "a doog pooping",
+  "something disguting",
+  "something involving drugs",
+  "something about music",
+  "something illegal",
+  "something random",
+  "some non-sense",
+  "something weird",
+  "something kinky",
+  "something queer",
+  "something creepy",
+  "something happening in a club",
+  "something about ACAB",
+  "something about black_market",
+  "something underground",
+  "something secret",
+  "something funny",
+  "something extrange",
+  "something about a party",
+  "something about a concert",
+  "something about a festival"
+]
+
+WHEREIS = [
+  "in a park of Berlin",
+  "in a home in Berlin",
+  "when going to a club of Berlin",
+  "in a street of Berlin",
+  "in a water fountain of Berlin",
+  "in a bus of Berlin",
+  "in the S-bahn",
+  "in the U-bahn"
+]
+
+def select_prompt
+  topic = TOPIC.sample
+  where = WHEREIS.sample
+  ["tweet about #{topic}, #{where}", "a picture of #{topic}, #{where}"]
+end
+
+def ai_tweet(topic)
+  response =
+    CLIENT.chat(
+      parameters: {
+        model: "gpt-3.5-turbo", # Required.
+        messages: [{ role: "system", content: topic }], # Required
+        temperature: 0.7
+      }
+    )
+  response.dig("choices", 0, "message", "content")
+end
+
+def ai_tweet_description(ai_tweet)
+  response =
+    CLIENT.completions(
+      parameters: {
+        model: "text-davinci-001", # Required.
+        prompt: ai_tweet[0..-30],
+        max_tokens: 15
+      }
+    )
+  response["choices"].map { |c| c["text"] }[0]
+end
+
+# Creating image with Ai and uploading to cloudinary
+# https://github.com/alexrudall/ruby-openai
+def ai_image(prompt)
+  response =
+    CLIENT.images.generate(
+      parameters: {
+        prompt:,
+        size: "256x256",
+        model: "image-alpha-001"
+      }
+    )
+  response.dig("data", 0, "url")
+end
+
+def image_uploader(ai_image)
+  Cloudinary::Uploader.upload ai_image, public_id: Digest::SHA256.hexdigest(ai_image)
+end
 
 puts "🤓 Creating users with devise..."
 puts "how many users do you want to create?"
@@ -115,18 +212,31 @@ n_posts.times do
   rand_latitude = rand(52.4901..52.5130)
   rand_longitude = rand(13.3888..13.4449)
   reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
+  prompt, prompt_image = select_prompt
+  puts "selected prompt: #{prompt}"
+  tweet = ai_tweet(prompt)
+  puts "AI tweet: #{tweet}"
+  sleep(2)
+  description = ai_tweet_description(tweet)
+  puts "AI description: #{description}"
+  sleep(5)
+  image = ai_image(prompt_image)
+  puts "created Ai image"
+  image_id = image_uploader(image)["public_id"]
+  puts "Uploading image to cloudinary..."
 
   Post.create(
-    title: Faker::Lorem.sentence(word_count: 3),
-    body: Faker::Lorem.paragraph(sentence_count: 2),
+    title: tweet,
+    body: description,
     user_id: User.all.sample.id,
-    post_image: ALL_IMAGES["resources"].sample["secure_url"],
+    post_image: Cloudinary::Utils.cloudinary_url(image_id, options = {}),
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
-    longitude: rand_longitude,
-    created_at: Faker::Date.between(from: '2022-01-01', to: '2022-12-31')
+    longitude: rand_longitude
   )
-  puts "Created post"
+  puts "Created post, sleeping 15 seconds..."
+  # wait before next request
+  sleep(10)
 end
 
 puts "Created #{Post.count} posts"
