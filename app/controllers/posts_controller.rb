@@ -27,7 +27,7 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
     @user = current_user
-    @post.user = @user 
+    @post.user = @user
     if @post.save
       redirect_to root_path
     else
@@ -43,6 +43,17 @@ class PostsController < ApplicationController
   end
 
   def destroy
+  end
+
+  def like
+    post = Post.fine(params[:id])
+    Like.create(user: current_user, post:)
+  end
+
+  def unlike
+    post = Post.find(params[:id])
+    raise
+    post.likes.delete(current_user)
   end
 
   private
