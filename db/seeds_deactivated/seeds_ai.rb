@@ -5,7 +5,6 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-
 require "open-uri"
 require "json"
 require "faker"
@@ -16,6 +15,7 @@ require "openai"
 require "cloudinary"
 require "cloudinary/uploader"
 require "cloudinary/utils"
+require 'digest'
 
 Cloudinary.config do |config|
   config.cloud_name = ENV.fetch("CLOUDINARY_CLOUD_NAME")
@@ -75,9 +75,95 @@ Dir.foreach(
   end
 end
 
-puts "🧼 4. Cleaning database..."
+puts "🧼 Cleaning database..."
 User.destroy_all
 Post.destroy_all
+
+puts "connecting with openai."
+CLIENT =
+  OpenAI::Client.new(
+    access_token: ENV.fetch("OPENAI_ACCESS_TOKEN"),
+    request_timeout: 240
+  )
+
+# topis for creating tweets
+puts "🤖 connecting with openai."
+CLIENT =
+  OpenAI::Client.new(
+    access_token: ENV.fetch("OPENAI_ACCESS_TOKEN"),
+    request_timeout: 240
+  )
+
+# topis for creating tweets
+TOPIC = [
+  "something trashy",
+  "something artsy",
+  "something related to a violent event",
+  "a fight",
+  "a demostration",
+  "a doog pooping",
+  "something disguting",
+  "something involving drugs",
+  "something about music",
+  "something illegal",
+  "something random",
+  "some non-sense",
+  "something weird",
+  "something kinky",
+  "something queer",
+  "something creepy",
+  "something happening in a club",
+  "something about ACAB",
+  "something about black_market",
+  "something underground",
+  "something secret",
+  "something funny",
+  "something extrange",
+  "something about a party",
+  "something about a concert",
+  "something about a festival"
+]
+
+WHEREIS = [
+  "in a park of Berlin",
+  "in a home in Berlin",
+  "when going to a club of Berlin",
+  "in a street of Berlin",
+  "in a water fountain of Berlin",
+  "in a bus of Berlin",
+  "in the S-bahn",
+  "in the U-bahn"
+]
+
+def select_prompt
+  topic = TOPIC.sample
+  where = WHEREIS.sample
+  ["tweet about #{topic}, #{where}", "a picture of #{topic}, #{where}"]
+end
+
+def ai_tweet(topic)
+  response =
+    CLIENT.chat(
+      parameters: {
+        model: "gpt-3.5-turbo", # Required.
+        messages: [{ role: "system", content: topic }], # Required
+        temperature: 0.7
+      }
+    )
+  response.dig("choices", 0, "message", "content")
+end
+
+def ai_tweet_description(ai_tweet)
+  response =
+    CLIENT.completions(
+      parameters: {
+        model: "text-davinci-001", # Required.
+        prompt: ai_tweet[0..-30],
+        max_tokens: 15
+      }
+    )
+  response["choices"].map { |c| c["text"] }[0]
+end
 
 puts "🤓 Creating users with devise..."
 puts "how many users do you want to create?"
@@ -108,17 +194,23 @@ print "➡️"
 n_posts = gets.chomp.to_i
 puts n_posts
 
-puts "creating #{n_posts} posts..."
+puts "Creating Post..."
 post = 0
-n_posts.times do
-  print post += 1
+10.times do
+  puts post += 1
   rand_latitude = rand(52.4901..52.5130)
   rand_longitude = rand(13.3888..13.4449)
   reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
+  prompt = select_prompt
+  puts "selected prompt: #{prompt}"
+  tweet = ai_tweet(prompt)
+  puts "AI tweet: #{tweet}"
+  description = ai_tweet_description(tweet)
+  puts "AI description: #{description}"
 
   Post.create(
-    title: Faker::Lorem.sentence(word_count: 3),
-    body: Faker::Lorem.paragraph(sentence_count: 2),
+    title: tweet,
+    body: description,
     user_id: User.all.sample.id,
     post_image: ALL_IMAGES["resources"].sample["secure_url"],
     address: reverse_geocode.first.address,
@@ -126,7 +218,9 @@ n_posts.times do
     longitude: rand_longitude,
     created_at: Faker::Date.between(from: '2022-01-01', to: '2023-05-10')
   )
-  puts "Created post"
+
+  # wait before next request
+  sleep(15)
 end
 
 puts "Created #{Post.count} posts"
