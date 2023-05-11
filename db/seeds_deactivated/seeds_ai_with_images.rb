@@ -151,8 +151,8 @@ def ai_tweet_description(ai_tweet)
     CLIENT.completions(
       parameters: {
         model: "text-davinci-001", # Required.
-        prompt: ai_tweet[0..-30],
-        max_tokens: 15
+        prompt: ai_tweet[0..-60],
+        max_tokens: 130
       }
     )
   response["choices"].map { |c| c["text"] }[0]
@@ -232,7 +232,8 @@ n_posts.times do
     post_image: Cloudinary::Utils.cloudinary_url(image_id, options = {}),
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
-    longitude: rand_longitude
+    longitude: rand_longitude,
+    created_at: Faker::Date.between(from: '2022-01-01', to: '2023-05-10')
   )
   puts "Created post, sleeping 15 seconds..."
   # wait before next request

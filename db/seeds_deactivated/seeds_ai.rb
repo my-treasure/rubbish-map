@@ -215,7 +215,8 @@ post = 0
     post_image: ALL_IMAGES["resources"].sample["secure_url"],
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
-    longitude: rand_longitude
+    longitude: rand_longitude,
+    created_at: Faker::Date.between(from: '2022-01-01', to: '2023-05-10')
   )
 
   # wait before next request
