@@ -5,7 +5,6 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-
 require "open-uri"
 require "json"
 require "faker"
@@ -16,6 +15,7 @@ require "openai"
 require "cloudinary"
 require "cloudinary/uploader"
 require "cloudinary/utils"
+require 'digest'
 
 Cloudinary.config do |config|
   config.cloud_name = ENV.fetch("CLOUDINARY_CLOUD_NAME")
@@ -25,13 +25,13 @@ Cloudinary.config do |config|
 end
 # -------------------------------------------- #
 # checks if the images in assets already exist in cloudinary
-puts "Uploading images to cloudinary..."
+puts "💫 1. Starting seeds..."
 ALL_IMAGES = Cloudinary::Api.resources(type: "upload", max_results: 500)
 
-puts "Renaming images..."
-# correct image names. replace "-", "(", ")" with "_"
+puts "📝 2. Renaming images..."
+# correcting image names replace "-", "(", ")" with "_"
 Dir.foreach(
-  File.join(Rails.root, "app", "assets", "images", "post_seed"),
+  File.join(Rails.root, "app", "assets", "images", "post_seed")
 ) do |filename|
   next if [".", ".."].include?(filename) # skip current and parent directories
 
@@ -53,7 +53,7 @@ Dir.foreach(
   end
 end
 
-puts "Uploading images to cloudinary..."
+puts "📤 3. Uploading images to cloudinary..."
 # check if item exist in ALL_IMAGES
 Dir.foreach(
   File.join(Rails.root, "app", "assets", "images", "post_seed")
@@ -75,7 +75,7 @@ Dir.foreach(
   end
 end
 
-puts "Cleaning database..."
+puts "🧼 Cleaning database..."
 User.destroy_all
 Post.destroy_all
 
@@ -87,33 +87,58 @@ CLIENT =
   )
 
 # topis for creating tweets
+puts "🤖 connecting with openai."
+CLIENT =
+  OpenAI::Client.new(
+    access_token: ENV.fetch("OPENAI_ACCESS_TOKEN"),
+    request_timeout: 240
+  )
+
+# topis for creating tweets
 TOPIC = [
-  "trashy",
-  "artsy",
-  "violent",
-  "disguting",
-  "envolving drugs",
-  "about music",
-  "illegal",
-  "with poop",
-  "intense",
-  "random",
-  "non-sense",
-  "delirious",
-  "weird",
-  "kinky",
-  "creepy",
-  "in a club",
-  "about ACAB",
-  "about black_market",
-  "underground",
-  "secret",
-  "funny",
-  "extrange"
+  "something trashy",
+  "something artsy",
+  "something related to a violent event",
+  "a fight",
+  "a demostration",
+  "a doog pooping",
+  "something disguting",
+  "something involving drugs",
+  "something about music",
+  "something illegal",
+  "something random",
+  "some non-sense",
+  "something weird",
+  "something kinky",
+  "something queer",
+  "something creepy",
+  "something happening in a club",
+  "something about ACAB",
+  "something about black_market",
+  "something underground",
+  "something secret",
+  "something funny",
+  "something extrange",
+  "something about a party",
+  "something about a concert",
+  "something about a festival"
+]
+
+WHEREIS = [
+  "in a park of Berlin",
+  "in a home in Berlin",
+  "when going to a club of Berlin",
+  "in a street of Berlin",
+  "in a water fountain of Berlin",
+  "in a bus of Berlin",
+  "in the S-bahn",
+  "in the U-bahn"
 ]
 
 def select_prompt
-  "create tweet about something #{TOPIC.sample}, in the city of Berlin"
+  topic = TOPIC.sample
+  where = WHEREIS.sample
+  ["tweet about #{topic}, #{where}", "a picture of #{topic}, #{where}"]
 end
 
 def ai_tweet(topic)
@@ -121,7 +146,7 @@ def ai_tweet(topic)
     CLIENT.chat(
       parameters: {
         model: "gpt-3.5-turbo", # Required.
-        messages: [{ role: "user", content: topic }], # Required
+        messages: [{ role: "system", content: topic }], # Required
         temperature: 0.7
       }
     )
@@ -130,17 +155,24 @@ end
 
 def ai_tweet_description(ai_tweet)
   response =
-    CLIENT.chat(
+    CLIENT.completions(
       parameters: {
-        model: "gpt-3.5-turbo", # Required.
-        messages: [{ role: "user", content: "create description about this #{ai_tweet}" }], temperature: 0.7
+        model: "text-davinci-001", # Required.
+        prompt: ai_tweet[0..-30],
+        max_tokens: 15
       }
     )
-  response.dig("choices", 0, "message", "content")
+  response["choices"].map { |c| c["text"] }[0]
 end
 
-puts "Creating users with devise..."
-5.times do
+puts "🤓 Creating users with devise..."
+puts "how many users do you want to create?"
+print "➡️"
+n_users = gets.chomp.to_i
+puts n_users
+puts "creating #{n_users} users..."
+
+n_users.times do
   rand_latitude = rand(52.4901..52.5130)
   rand_longitude = rand(13.3888..13.4449)
   reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
@@ -148,12 +180,19 @@ puts "Creating users with devise..."
     email: Faker::Internet.email,
     user_name: Faker::Internet.username,
     password: Faker::Internet.password(min_length: 6),
+    role: "seed",
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
     longitude: rand_longitude
   )
 end
 puts "Created #{User.count} users"
+
+puts "📸 Creating Post..."
+puts "how many posts do you want to create?"
+print "➡️"
+n_posts = gets.chomp.to_i
+puts n_posts
 
 puts "Creating Post..."
 post = 0
@@ -185,7 +224,3 @@ end
 
 puts "Created #{Post.count} posts"
 puts "Finished!"
-
-#https://github.com/alexrudall/ruby-openai
-# response = client.images.generate(parameters: { prompt: "A baby sea otter cooking pasta wearing a hat of some sort", size: "256x256" })
-# puts response.dig("data", 0, "url")
