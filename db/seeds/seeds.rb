@@ -124,7 +124,7 @@ n_posts.times do
     address: reverse_geocode.first.address,
     latitude: rand_latitude,
     longitude: rand_longitude,
-    created_at: Faker::Date.between(from: '2022-01-01', to: '2022-12-31')
+    created_at: Faker::Date.between(from: '2022-01-01', to: '2023-05-10')
   )
   puts "Created post"
 end
