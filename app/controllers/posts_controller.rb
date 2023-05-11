@@ -17,15 +17,17 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
-    
+
   end
 
   def new
-    @posts = Post.new
+    @post = Post.new
   end
 
   def create
     @post = Post.new(post_params)
+    @user = current_user
+    @post.user = @user 
     if @post.save
       redirect_to root_path
     else
@@ -42,9 +44,10 @@ class PostsController < ApplicationController
 
   def destroy
   end
-end
 
- private
+  private
+
   def post_params
-    params.require(:post).permit(:title, :body, :lat, :lng, :post_image)
+    params.require(:post).permit(:title, :body, :address)
   end
+end
