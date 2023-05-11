@@ -1,6 +1,7 @@
 <div class="card shadow-sm">
   <div width="100%" height="225">
-    <img src=<%= post.post_image %> alt="post image" width="100%" height="100%">
+  <%= cl_image_tag post.post_image.key, height: 300, width: 400, crop: :fill %>
+   
   </div>
   <div class="card-body">
     <h6><strong><%= link_to post.title, post %></strong></h6>

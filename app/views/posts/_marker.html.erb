@@ -1,1 +1,3 @@
-<%= image_tag post.post_image, height: 30, width: 30, alt: "Logo" %>
+<% if post.post_image.present? %>
+  <%= image_tag post.post_image, height: 30, width: 30, alt: "Logo" %>
+<% end %>
