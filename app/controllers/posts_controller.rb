@@ -27,9 +27,12 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
     @user = current_user
-    @post.user = @user 
+    @post.user = @user
     if @post.save
-      redirect_to root_path
+      photo_url = @post.photo.service_url
+      @post.update(post_image: photo_url)
+      redirect_to @post
+      #redirect_to root_path
     else
       render :new
     end
@@ -48,6 +51,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :body, :address)
+    params.require(:post).permit(:title, :body, :address, :photo)
   end
 end
