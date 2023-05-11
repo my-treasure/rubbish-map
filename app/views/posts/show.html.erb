@@ -5,8 +5,8 @@
       <div class="grid_show">
         <div class="card shadow-sm">
           <div width="100%" height="100%">
-            <h4> Post title: <%= @posts.title %> </h4>
-            <img src=<%= @posts.post_image %> alt="post image" width="100%" height="100%">
+            <h4> Post title: <%= @post.title %> </h4>
+            <img src=<%= @post.post_image %> alt="post image" width="100%" height="100%">
           </div>
           <div class="card-body">
             <div class="d-flex justify-content-end align-items-center">
@@ -15,20 +15,24 @@
         </div>
         <div class="card shadow-sm">
           <div width="100%" height="100%">
-            <h4> Post body: <%= @posts.body %> </h4>
+            <h4> Post body: <%= @post.body %> </h4>
             <h6> Username </h6>
             <div class="card shadow-sm">
-              <h6> Comments: <%= @posts.body %> </h6>
+              <h6> Comments: <%= @post.body %> </h6>
             </div>
           </div>
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-end">
               <div class="btn-group">
-                <%= button_to 'Like', post_likes_path(@posts), method: :post %>
+                <% if Like.where(user: current_user).where(post: @post).present? %>
+                  <%= nil %>
+                <% else %>
+                  <%= button_to 'Like', post_createlike_path(@post), method: :post %>
+                <% end %>
                 <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Likes</button> -->
                 <button type="button" class="btn btn-sm btn-outline-secondary">Edit / Delete</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary">Comments</button>
-                <p><%= @posts.likes.count %> <%= (@posts.likes.count) == 1 ? 'Like' : 'Likes'%></p>
+                <p><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
 
               </div>
             </div>

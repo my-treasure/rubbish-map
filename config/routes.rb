@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root to: "posts#index"
   devise_for :users
   resources :posts do
-    resources :likes
+    post "likes", to: "likes#create", as: "createlike"
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
