@@ -48,6 +48,17 @@ class PostsController < ApplicationController
   def destroy
   end
 
+  def like
+    post = Post.fine(params[:id])
+    Like.create(user: current_user, post:)
+  end
+
+  def unlike
+    post = Post.find(params[:id])
+    raise
+    post.likes.delete(current_user)
+  end
+
   private
 
   def post_params
