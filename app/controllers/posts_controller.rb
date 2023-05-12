@@ -8,16 +8,19 @@ class PostsController < ApplicationController
         lng: post.longitude,
         info_window_html: render_to_string(partial: "info_window", locals: { post: post }),
         marker_html: render_to_string(partial: "marker", locals: { post: post })
-
       }
     end
-
-
   end
 
   def show
     @post = Post.find(params[:id])
-
+    @markers =
+      {
+        lat: @post.latitude,
+        lng: @post.longitude,
+        info_window_html: render_to_string(partial: "info_window", locals: { post: @post }),
+        marker_html: render_to_string(partial: "marker", locals: { post: @post })
+      }
   end
 
   def new
@@ -31,8 +34,8 @@ class PostsController < ApplicationController
     if @post.save
       photo_url = @post.photo.service_url
       @post.update(post_image: photo_url)
-      redirect_to @post
-      #redirect_to root_path
+      #redirect_to @post
+      redirect_to root_path
     else
       render :new
     end
