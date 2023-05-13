@@ -1,81 +1,55 @@
-<div class="album py-5 bg-body-tertiary">
-  <a href="#" class="btn btn-primary my-2">Create Post</a>
-  
-<div class="grid_show">
-  <div class="card shadow-sm">
-    <div width="100%" height="100%">
-      <h4> Post title: <%= @post.title %> </h4>
-      <%= cl_image_tag @post.post_image.key, height: "100%", width: "100%" %>
-            <% if  @post.post_image.attached? %>
-            <%= cl_image_tag @post.post_image.key %>
-            <% else %>
-            <h5>PlaceHolder</h5>
-            <% end %>
-          </div>
-          <div class="card-body">
-            <div class="d-flex justify-content-end align-items-center">
-            </div>
-          </div>
-        </div>
-        <div class="card shadow-sm">
-          <div width="100%" height="100%">
-            <h4> Post body: <%= @post.body %> </h4>
-            <h6> Username </h6>
-            <div class="card shadow-sm">
-              <h6> Comments: <%= @post.body %> </h6>
-              <% @post.comments.each do |comment| %>
-            <p><%= comment.content %></p>
-          <% end %>
-          <div>
-            <%= simple_form_for [@post, Comment.new] do |form| %>
-              <%= form.text_field :content, placeholder: "Add a comment" %>
-              <%= form.submit "Post Comment", class: "btn btn-primary" %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-end">
-              <div class="btn-group">
-                <% if @post.likes.where(user: current_user).exists? %>
-                  <%= link_to 'Unlike', unlike_post_path(@post), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"} %>
-                <% else %>
-                  <%= link_to 'Like', like_post_path(@post), method: :post %>
-                <% end %>
 
 
+
+
+  <div class="bg-image"
+    style="background-image: url('<%= cl_image_path @post.post_image.key %>')">
     </div>
-    <div class="card-body">
-      <div class="d-flex justify-content-end align-items-center">
-      </div>
-    </div>
-  </div>
-  <div class="card shadow-sm">
-    <div width="100%" height="100%">
-      <h4> Post body: <%= @post.body %> </h4>
-      <h6> Username (user that created the post)</h6>
-      <div class="card shadow-sm">
-        <h6> Comments: <%= @post.body %> </h6>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="d-flex justify-content-between align-items-end">
-        <div class="btn-set">
-          <% if @post.likes.where(user: current_user).exists? %>
+
+<div class="container">
+  <h4 class="mt-5"> Post title: <%= @post.title %> </h4>
+  <div class="options">
+   <% if @post.likes.where(user: current_user).exists? %>
             <%= button_to 'Unlike', unlike_post_path(@post), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-light btn-outline-secondary" %>
           <% else %>
-            <%= button_to 'Like', like_post_path(@post), method: :post, class: "btn btn-light btn-outline-secondary" %>
+            <%= button_to 'Like', like_post_path(@post), method: :post, class: "pl-3 btn btn-light btn-outline-secondary" %>
           <% end %>
-          <button type="button" class="btn btn-light btn-outline-secondary">Comment</button>
-          <p><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
-          </div>
-        </div>
-      </div>
-    </div>
+          <button type="button" class="btn btn-light btn-outline-secondary commenter">Comment</button>
+          <p class="liker"><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
   </div>
+
+            <div class="comment-options">
+
+            <%= simple_form_for [@post, Comment.new] do |form| %>
+              <div class="form-inputs">
+              <%= form.text_field :content, placeholder: "Add a comment", class: "badboyform mt-3" %>
+              </div>
+              <div class="form-actions">
+              <%= form.submit "Post Comment", class: "btn btn-primary mt-3  mt-4" %>
+              </div>
+            <% end %>
+          </div>
+
+           <h3 class="mb-5 mt-4"> Description: <br> <%= @post.body %> </h3>
+
+           <h2>Comments:</h2>
+
+              <% @post.comments.each do |comment| %>
+              <div class="reaction-options">
+              <% if comment.user.profile_picture.attached? %>
+                   <%= cl_image_tag comment.user.profile_picture.key %>
+                   <% else %>
+                   <%= image_tag "UIelements/rubbishlogo.png"%>
+              <% end %>
+
+
+              <p><%= comment.content %></p>
+              </div>
+          <% end %>
+
 </div>
 
-
-<button type="button" class="btn btn-sm btn-outline-secondary">Comments</button>
+<br>
+<br>
+<br>
+<br>
