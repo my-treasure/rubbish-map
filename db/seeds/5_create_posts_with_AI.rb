@@ -16,12 +16,6 @@ require 'digest'
 
 POST_PICTURES = Cloudinary::Api.resources(type: "upload", max_results: 500, prefix: "post_seed/")
 
-puts image
-puts file
-puts image_id
-puts url
-puts " "
-
 puts "🤖 connecting with openai."
 CLIENT =
   OpenAI::Client.new(
