@@ -94,7 +94,7 @@ def prompt_from_tweet(ai_tweet)
     CLIENT.chat(
       parameters: {
         model: "gpt-3.5-turbo", # Required.
-        messages: [{ role: "system", content: "generate a prompt for openai dalle from this tweet for getting a realistic photo: #{ai_tweet}" }], # Required
+        messages: [{ role: "system", content: "generate a simple prompt for openai dalle from this tweet for getting a concrete realistic photo: #{ai_tweet}" }], # Required
         temperature: 0.7
       }
     )
