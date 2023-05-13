@@ -9,6 +9,7 @@
 require "json"
 require "faker"
 require "geocoder"
+require "open-uri"
 require "openai"
 
 require 'digest'
