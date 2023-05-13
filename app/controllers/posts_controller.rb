@@ -53,8 +53,9 @@ class PostsController < ApplicationController
   end
 
   def like
-    post = Post.fine(params[:id])
-    Like.create(user: current_user, post:)
+    post = Post.find(params[:id])
+    Like.create(user: current_user, post_id: post.id)
+    redirect_to post_path(post)
   end
 
   def unlike
