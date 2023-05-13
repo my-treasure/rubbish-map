@@ -72,6 +72,8 @@ gem 'pp'
 
 # image hosting
 gem "cloudinary"
+gem 'unsplash'
+
 
 
 group :development, :test do

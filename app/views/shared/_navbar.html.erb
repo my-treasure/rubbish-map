@@ -2,7 +2,7 @@
 
   <div class="container-fluid">
     <%= link_to root_path, class: "navbar-brand" do %>
-      <%= cl_image_tag("UIelements/Aimages_MagicStock_-_847d22e6-c8e6-4cd3-93aa-b15bf4afeb87_epni2f.png", :width=>80, :crop=>"scale") %>
+      <%= cl_image_tag("https://res.cloudinary.com/dxdyu4tqu/image/upload/v1683909165/UIelements/rubbishlogo.png", :width=>80, :crop=>"scale") %>
     <% end %>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,7 +20,7 @@
           </li>
           <li class="nav-item dropdown">
           <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <%= image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar", alt: "dropdown menu" %>
+            <%= cl_image_tag @user.profile_picture.key, :width => 40, :height => 40, :crop => :fill, :radius => "max" %>
           </a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <%= link_to "Action", "#", class: "dropdown-item" %>
