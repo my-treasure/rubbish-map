@@ -15,16 +15,6 @@ require "openai"
 require 'digest'
 
 POST_PICTURES = Cloudinary::Api.resources(type: "upload", max_results: 500, prefix: "post_seed/")
-image = POST_PICTURES["resources"].sample
-url = image["secure_url"]
-file = URI.open(image["secure_url"])
-image_id = image["public_id"]
-
-puts image
-puts file
-puts image_id
-puts url
-puts " "
 
 puts "🤖 connecting with openai."
 CLIENT =
@@ -55,7 +45,7 @@ TOPIC = [
   "something secret",
   "something funny",
   "something extrange",
-  "something about a party",
+  "something about a party"
 ]
 
 WHEREIS = [
@@ -69,10 +59,10 @@ WHEREIS = [
   "in the U-bahn"
 ]
 
-def select_prompt()
+def select_prompt
   topic = TOPIC.sample
   where = WHEREIS.sample
-  ["tweet about #{topic}, #{where}", "a picture of #{topic}, #{where}"]
+  "tweet about #{topic}, #{where}"
 end
 
 def ai_tweet(topic)
@@ -129,8 +119,8 @@ def image_uploader(ai_image)
   Cloudinary::Uploader.upload ai_image, public_id: "post_seed/#{Digest::SHA256.hexdigest(ai_image)}"
 end
 
-def ai_post_generator()
-  prompt, prompt_image = select_prompt()
+def ai_post_generator
+  prompt = select_prompt
   puts "selected prompt: #{prompt}"
   tweet = ai_tweet(prompt)
   puts "AI tweet: #{tweet}"
@@ -172,7 +162,7 @@ n_posts.times do
   reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
 
   if set_ai
-    tweet, description, image_id = ai_post_generator()
+    tweet, description, image_id = ai_post_generator
     file = URI.open(Cloudinary::Utils.cloudinary_url(image_id, options = {}))
     sleep_time = rand(5..10)
   else
@@ -193,7 +183,7 @@ n_posts.times do
     longitude: rand_longitude,
     created_at: Faker::Date.between(from: '2022-01-01', to: '2023-05-10')
   )
-  new_post.post_image.attach(io: file, filename: image_id , content_type: "image/png")
+  new_post.post_image.attach(io: file, filename: image_id, content_type: "image/png")
 
   puts "Created post, sleeping #{sleep_time} seconds...\n"
   # wait before next request

@@ -4,7 +4,6 @@ require "geocoder"
 require "open-uri"
 require 'httparty'
 
-
 PROFILE_PICTURES = Cloudinary::Api.resources(type: "upload", max_results: 500, prefix: "profile_pictures/")
 
 puts "🤓 Creating users with devise..."
