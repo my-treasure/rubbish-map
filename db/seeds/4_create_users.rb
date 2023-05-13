@@ -6,7 +6,6 @@ require 'httparty'
 
 
 PROFILE_PICTURES = Cloudinary::Api.resources(type: "upload", max_results: 500, prefix: "profile_pictures/")
-puts PROFILE_PICTURES["resources"].first
 
 puts "🤓 Creating users with devise..."
 puts "how many users do you want to create?"
@@ -21,7 +20,7 @@ n_users.times do
   reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
   photo_blob = PROFILE_PICTURES["resources"].sample
   file = URI.open(photo_blob["secure_url"])
-  new_user = User.create!(
+  new_user = User.new(
     email: Faker::Internet.email,
     user_name: Faker::Internet.username,
     password: Faker::Internet.password(min_length: 6),
@@ -31,5 +30,6 @@ n_users.times do
     longitude: rand_longitude
   )
   new_user.profile_picture.attach(io: file, filename: photo_blob["public_id"], content_type: "image/jpg")
+  new_user.save
 end
 puts "Created #{User.count} users"
