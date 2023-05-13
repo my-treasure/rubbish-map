@@ -25,23 +25,16 @@ CLIENT =
 
 # topis for creating tweets
 TOPIC = [
-  "something trashy",
-  "something artsy",
   "something related to a violent event",
   "a fight",
   "a demostration",
   "a doog pooping",
   "something disguting",
-  "something involving drugs",
   "something random",
-  "some non-sense",
-  "something weird",
   "something kinky",
   "something queer",
   "something creepy",
   "something happening in a club",
-  "something about ACAB",
-  "something about black_market",
   "something secret",
   "something funny",
   "something extrange",
@@ -94,7 +87,7 @@ def prompt_from_tweet(ai_tweet)
     CLIENT.chat(
       parameters: {
         model: "gpt-3.5-turbo", # Required.
-        messages: [{ role: "system", content: "generate a simple prompt for openai dalle from this tweet for getting a concrete realistic photo: #{ai_tweet}" }], # Required
+        messages: [{ role: "system", content: "generate a simple prompt for dall-e2 from this text for getting a realistic picture: #{ai_tweet}" }], # Required
         temperature: 0.7
       }
     )

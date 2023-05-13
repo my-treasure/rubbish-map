@@ -11,13 +11,14 @@
 @import "components/index";
 @import "pages/index";
 @import "pages/show";
-@import "/pages/postcard";
 
 
 body {
 background: rgb(136,0,182) !important;
 background: linear-gradient(142deg, rgba(136,0,182,1) 0%, rgba(0,92,113,1) 100%) !important;
 }
+
+
 .bg-image{
   height: 40vh;
 }
@@ -77,4 +78,4 @@ margin-left: 12px;
 top: 7px;
   }
 
-} 
+}
