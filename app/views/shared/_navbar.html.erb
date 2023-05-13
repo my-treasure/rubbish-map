@@ -2,9 +2,9 @@
 
   <div class="container-fluid">
     <%= link_to root_path, class: "navbar-brand" do %>
-      <%= cl_image_tag("https://res.cloudinary.com/dxdyu4tqu/image/upload/v1683909165/UIelements/rubbishlogo.png", :width=>80, :crop=>"scale") %>
+      <%= image_tag "UIelements/rubbishlogo.png" %>
     <% end %>
-
+    <a class="navbar-brand" href="#">Rubbishmap</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -21,9 +21,9 @@
           <li class="nav-item dropdown">
           <a href="#" class="avatar" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <% if current_user.profile_picture.attached? %>
-            <%= cl_image_tag current_user.profile_picture.key, :width => 40, :height => 40, :crop => :fill, :radius => "max" %>
+            <%= cl_image_tag current_user.profile_picture.key, :width => 40, :height => 40, :crop => :fill, :radius => "max", class: "profile_picture"%>
             <% else %>
-            <%= cl_image_tag(https://res.cloudinary.com/dxdyu4tqu/image/upload/v1683908905/profile_pictures/photo-1583795128727-6ec3642408f8.jpg), :width => 40, :height => 40, :crop => :fill, :radius => "max" %>
+            <img src="https://res.cloudinary.com/dxdyu4tqu/image/upload/v1683908905/profile_pictures/photo-1583795128727-6ec3642408f8.jpg" alt="">
             <% end %>
           </a>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
