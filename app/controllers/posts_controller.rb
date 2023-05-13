@@ -21,7 +21,6 @@ class PostsController < ApplicationController
         info_window_html: render_to_string(partial: "info_window", locals: { post: @post }),
         marker_html: render_to_string(partial: "marker", locals: { post: @post })
       }
-
   end
 
   def new
@@ -40,7 +39,6 @@ class PostsController < ApplicationController
     else
       render :new
     end
-
   end
 
   def edit
