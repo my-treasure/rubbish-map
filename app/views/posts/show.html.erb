@@ -19,7 +19,18 @@
             <h4> Post body: <%= @post.body %> </h4>
             <h6> Username </h6>
             <div class="card shadow-sm">
-              <h6> Comments: <%= @post.body %> </h6>
+              <h6> Comments: <%#= @post.body %> </h6>
+              <% @post.comments.each do |comment| %>
+            <p><%= comment.content %></p>
+          <% end %>
+          <div>
+            <%= form_with(model: [@post, Comment.new]) do |form| %>
+              <%= form.text_field :content, placeholder: "Add a comment" %>
+              <%= form.submit "Post Comment", class: "btn btn-primary" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
             </div>
           </div>
           <div class="card-body">
@@ -42,3 +53,6 @@
         </div>
       </div>
 </div>
+
+
+<button type="button" class="btn btn-sm btn-outline-secondary">Comments</button>
