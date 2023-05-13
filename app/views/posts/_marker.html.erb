@@ -1,3 +1,6 @@
 <% if post.post_image.present? %>
-  <%= image_tag post.post_image, height: 30, width: 30, alt: "Logo" %>
+<%= cl_image_tag post.post_image.key,
+        :gravity => "center",
+        :class => "avatar-bordered",
+        crop: :fill %>
 <% end %>
