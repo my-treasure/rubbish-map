@@ -21,6 +21,7 @@ class PostsController < ApplicationController
         info_window_html: render_to_string(partial: "info_window", locals: { post: @post }),
         marker_html: render_to_string(partial: "marker", locals: { post: @post })
       }
+
   end
 
   def new
@@ -31,11 +32,11 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @user = current_user
     @post.user = @user
+
     if @post.save
-      photo_url = @post.photo.service_url
-      @post.update(post_image: photo_url)
-      #redirect_to @post
+
       redirect_to root_path
+
     else
       render :new
     end
@@ -65,6 +66,6 @@ class PostsController < ApplicationController
   private
 
   def post_params
-    params.require(:post).permit(:title, :body, :address, :photo)
+    params.require(:post).permit(:title, :body, :address, :post_image)
   end
 end

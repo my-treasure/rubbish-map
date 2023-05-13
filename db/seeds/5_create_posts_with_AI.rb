@@ -9,11 +9,22 @@
 require "json"
 require "faker"
 require "geocoder"
+require "open-uri"
 require "openai"
 
 require 'digest'
 
 POST_PICTURES = Cloudinary::Api.resources(type: "upload", max_results: 500, prefix: "post_seed/")
+image = POST_PICTURES["resources"].sample
+url = image["secure_url"]
+file = URI.open(image["secure_url"])
+image_id = image["public_id"]
+
+puts image
+puts file
+puts image_id
+puts url
+puts " "
 
 puts "🤖 connecting with openai."
 CLIENT =
@@ -93,7 +104,7 @@ def prompt_from_tweet(ai_tweet)
     CLIENT.chat(
       parameters: {
         model: "gpt-3.5-turbo", # Required.
-        messages: [{ role: "system", content: "generate a prompt for openai dalle image generator from this tweet: #{ai_tweet}" }], # Required
+        messages: [{ role: "system", content: "generate a prompt for openai dalle from this tweet for getting a realistic photo: #{ai_tweet}" }], # Required
         temperature: 0.7
       }
     )
@@ -162,10 +173,15 @@ n_posts.times do
 
   if set_ai
     tweet, description, image_id = ai_post_generator()
+    file = URI.open(Cloudinary::Utils.cloudinary_url(image_id, options = {}))
+    sleep_time = rand(5..10)
   else
     tweet = Faker::Lorem.sentence(word_count: 3)
     description = Faker::Lorem.paragraph(sentence_count: 2)
-    image_id = POST_PICTURES["resources"].sample["public_id"]
+    image = POST_PICTURES["resources"].sample
+    file = URI.open(image["url"])
+    image_id = image["public_id"]
+    sleep_time = 0
   end
 
   new_post = Post.create(
@@ -177,11 +193,11 @@ n_posts.times do
     longitude: rand_longitude,
     created_at: Faker::Date.between(from: '2022-01-01', to: '2023-05-10')
   )
-  new_post.post_image.attach(io: URI.open(Cloudinary::Utils.cloudinary_url(image_id, options = {})), filename: image_id , content_type: "image/png")
+  new_post.post_image.attach(io: file, filename: image_id , content_type: "image/png")
 
-  puts "Created post, sleeping 10 seconds...\n"
+  puts "Created post, sleeping #{sleep_time} seconds...\n"
   # wait before next request
-  sleep(10)
+  sleep(sleep_time)
 end
 
 puts "Created #{Post.count} posts"

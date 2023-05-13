@@ -33,7 +33,7 @@ def upload_image(subfolder, new_filename)
     Cloudinary::Uploader.upload File.join(
       Rails.root,
       new_filename
-      ), public_id: "#{subfolder}/#{File.basename(new_filename)}"
+      ), public_id: "#{subfolder}/#{File.basename(new_filename).split(".").first}"
     puts "#{subfolder}/#{File.basename(new_filename)} uploaded to cloudinary"
     not_exists += 1
   end

@@ -1,6 +1,9 @@
 require "json"
 require "faker"
 require "geocoder"
+require "open-uri"
+require 'httparty'
+
 
 PROFILE_PICTURES = Cloudinary::Api.resources(type: "upload", max_results: 500, prefix: "profile_pictures/")
 
@@ -16,8 +19,8 @@ n_users.times do
   rand_longitude = rand(13.3888..13.4449)
   reverse_geocode = Geocoder.search([rand_latitude, rand_longitude])
   photo_blob = PROFILE_PICTURES["resources"].sample
-  file = URI.open(photo_blob["url"])
-  new_user = User.create!(
+  file = URI.open(photo_blob["secure_url"])
+  new_user = User.new(
     email: Faker::Internet.email,
     user_name: Faker::Internet.username,
     password: Faker::Internet.password(min_length: 6),
@@ -26,6 +29,7 @@ n_users.times do
     latitude: rand_latitude,
     longitude: rand_longitude
   )
-  new_user.profile_picture.attach(io: file, filename: photo_blob["public_id"] , content_type: "image/png")
+  new_user.profile_picture.attach(io: file, filename: photo_blob["public_id"], content_type: "image/jpg")
+  new_user.save
 end
 puts "Created #{User.count} users"
