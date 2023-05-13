@@ -9,9 +9,9 @@
 
 Dir.glob(File.join("*", "seeds", "*.rb")).each do |seed|
   puts "\n🌱 Do you wish to run #{seed}: [Y,n]"
-  print "➡️"
+  puts "➡️"
   if gets.chomp.downcase == "n"
-    print "🛸 Skipping file\n"
+    puts "🛸 Skipping file\n"
   else
   	load seed
   end
