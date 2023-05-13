@@ -1,0 +1,40 @@
+.card-index{
+  flex: 1 1 auto;
+  padding: 5%;
+}
+
+.main-card {
+  background-color: #3e8e45;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 3px 6px rgba(65, 65, 65, 0.16), 0 3px 6px rgba(65, 65, 65, 0.16);
+}
+
+.img-petcard {
+  height: 40px;
+  width: 35px;
+}
+
+h6 {
+  color: #ffffff
+}
+
+a {
+  text-decoration: none;
+  color: rgb(147, 0, 137);
+}
+
+.btn-set {
+  bottom: 0px;
+}
+
+.more-btn {
+  width: 100%;
+  margin-top: 5px;
+  display: inline-block;
+  text-align: center;
+  padding: 7px 10px;
+  border-radius: 11px;
+  background-color: #222222;
+  transition: 1s;
+}

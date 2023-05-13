@@ -1,12 +1,11 @@
-<div>
+<div class="album py-5 bg-body-tertiary">
   <a href="#" class="btn btn-primary my-2">Create Post</a>
-
-
-      <div class="grid_show">
-        <div class="card shadow-sm">
-          <div width="100%" height="100%">
-            <h4> Post title: <%= @post.title %> </h4>
-
+  
+<div class="grid_show">
+  <div class="card shadow-sm">
+    <div width="100%" height="100%">
+      <h4> Post title: <%= @post.title %> </h4>
+      <%= cl_image_tag @post.post_image.key, height: "100%", width: "100%" %>
             <% if  @post.post_image.attached? %>
             <%= cl_image_tag @post.post_image.key %>
             <% else %>
@@ -46,16 +45,36 @@
                   <%= link_to 'Like', like_post_path(@post), method: :post %>
                 <% end %>
 
-                <!-- <button type="button" class="btn btn-sm btn-outline-secondary">Likes</button> -->
-                <button type="button" class="btn btn-sm btn-outline-secondary">Edit / Delete</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Comments</button>
-                <p><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
 
-              </div>
-            </div>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-end align-items-center">
+      </div>
+    </div>
+  </div>
+  <div class="card shadow-sm">
+    <div width="100%" height="100%">
+      <h4> Post body: <%= @post.body %> </h4>
+      <h6> Username (user that created the post)</h6>
+      <div class="card shadow-sm">
+        <h6> Comments: <%= @post.body %> </h6>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-end">
+        <div class="btn-set">
+          <% if @post.likes.where(user: current_user).exists? %>
+            <%= button_to 'Unlike', unlike_post_path(@post), data: {turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "btn btn-light btn-outline-secondary" %>
+          <% else %>
+            <%= button_to 'Like', like_post_path(@post), method: :post, class: "btn btn-light btn-outline-secondary" %>
+          <% end %>
+          <button type="button" class="btn btn-light btn-outline-secondary">Comment</button>
+          <p><%= @post.likes.count %> <%= (@post.likes.count) == 1 ? 'Like' : 'Likes'%></p>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 </div>
 
 
