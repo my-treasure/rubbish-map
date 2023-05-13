@@ -13,7 +13,67 @@
 @import "pages/show";
 @import "/pages/postcard";
 
+
 body {
 background: rgb(136,0,182) !important;
 background: linear-gradient(142deg, rgba(136,0,182,1) 0%, rgba(0,92,113,1) 100%) !important;
 }
+.bg-image{
+  height: 40vh;
+}
+
+.options{
+  display: flex;
+  align-items: center;
+
+
+  .liker{
+    margin-left: 20px;
+    position: relative;
+    top: 6px;
+  }
+
+  .commenter{
+    margin-left: 24px;
+  }
+}
+
+.comment-options{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+
+
+  .form-inputs{
+    width: 100% !important;
+  }
+
+  .badboyform{
+    width: 100% !important;
+    padding: 17px;
+  }
+}
+
+#new_comment {
+  width: 100%;
+}
+
+
+.reaction-options{
+  display: flex;
+  align-items: center;
+
+  img {
+    background-color: red;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+  }
+
+  p {
+    position: relative;
+margin-left: 12px;
+top: 7px;
+  }
+
