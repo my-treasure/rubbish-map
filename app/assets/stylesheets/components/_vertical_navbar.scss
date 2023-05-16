@@ -1,0 +1,14 @@
+.lewagon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: center;
+  background: rgb(93, 0, 136);
+  z-index: 1000;
+  grid-area: sidebar;
+}
+
+.navbar-brand img {
+  width: 40px;
+}
