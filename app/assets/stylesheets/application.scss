@@ -13,11 +13,19 @@
 @import "pages/show";
 
 
+
 body {
 background: rgb(136,0,182) !important;
 background: linear-gradient(142deg, rgba(136,0,182,1) 0%, rgba(0,92,113,1) 100%) !important;
 }
 
+.main_grid {
+  display: grid;
+  grid-template-columns: 0.4fr 1.6fr;
+  grid-gap: 20px;
+  grid-template-areas:
+    "sidebar main";
+}
 
 .bg-image{
   height: 40vh;

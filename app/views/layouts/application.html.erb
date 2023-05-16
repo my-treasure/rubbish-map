@@ -13,10 +13,12 @@
   </head>
 
   <body>
-    <%= render "shared/navbar" %>
-    <div class="container">
-      <%= yield %>
+    <div class="main_grid">
+      <%= render "shared/vertical_navbar" %>
+      <div class="container">
+        <%= yield %>
+      </div>
     </div>
-    <%= render "posts/map" %>
+    <%#= render "posts/map" %>
   </body>
 </html>
