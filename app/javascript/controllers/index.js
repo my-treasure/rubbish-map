@@ -4,8 +4,15 @@
 
 import { application } from "./application"
 
+import VisibilityController from "./visibility_controller"
+application.register("visibility", VisibilityController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
 import MapController from "./map_controller"
 application.register("map", MapController)
+
+// import Reveal from "stimulus-reveal-controller";
+// const application = Application.start();
+// application.register("reveal", Reveal);
