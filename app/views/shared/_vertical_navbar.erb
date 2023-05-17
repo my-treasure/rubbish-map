@@ -5,14 +5,34 @@
             <span class="navbar-toggler-icon"></span>
           </button>
     </div>
-  <div class="nav">
+  <div class="nav fixed_nav">
     <ul class="nav navbar-nav">
       <li>
       <%= link_to root_path, class: "navbar-brand" do %>
           <%= image_tag "UIelements/rubbishlogo.png" %>
         <% end %>
         <a class="navbar-brand" href="#">Rubbishmap</a>
-
+      <li class="nav-item" data-controller="reveal" data-reveal-hidden-class="d-none">
+        <div >
+          <button data-action="click->reveal#toggle" type="button" class="btn">Toggle</button>
+          <p data-reveal-target="item" class="d-none mt-4">Toggle map</p>
+          <p data-reveal-target="item" class="mt-4">Toggle cards</p>
+        </div>
+      </li>
+      <li>
+          <h6>Toggle Visibility</h6>
+          <button data-action="visibility#showTargets" class="btn btn-info btn-sm">Show All Elements</button>
+      </li>
+      <li>
+          <button data-action="visibility#hideTargets" class="btn btn-info btn-sm mt-2">Hide All Elements</button>
+      </li>
+      <li>
+          <button data-action="visibility#toggleTargets" class="btn btn-info btn-sm mt-2 data-toggle="button" aria-pressed="false" >Toggle Element Visibility</button>
+          <button data-action="click->visibility#openMap" class="btn btn-info btn-sm mt-2 data-toggle="button" aria-pressed="false" >Show Map</button>
+      </li>
+      <li >
+          <p data-visibility-target="hideable">The Flamboyent Thing #1<p/>
+          <p data-visibility-target="hideable" hidden>The Slightly Stealthy Thing #2<p/>
       </li>
       <% if user_signed_in? %>
         <li class="nav-item active">

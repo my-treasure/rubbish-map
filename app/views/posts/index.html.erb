@@ -3,8 +3,12 @@
 <main>
   <div class="">
   </div>
-  <div class="album py-5">
-    <div class="grid">
+  <div class="album py-5" data-controller="visibility">
+    <div class="" data-visibility-target="hideable" hidden>
+      <%= render "posts/map" %>
+    </div>
+
+    <div class="grid" data-visibility-target="hideable">
       <% @posts.each do |post| %>
         <%= render "postcard", post: post %>
       <% end %>
