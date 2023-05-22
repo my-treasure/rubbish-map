@@ -14,13 +14,14 @@ class PostsController < ApplicationController
 
   def show
     @post = Post.find(params[:id])
-    @markers =[
+    @markers = [
       {
         lat: @post.latitude,
         lng: @post.longitude,
         info_window_html: render_to_string(partial: "info_window", locals: { post: @post }),
         marker_html: render_to_string(partial: "marker", locals: { post: @post })
-      }]
+      }
+    ]
   end
 
   def new
